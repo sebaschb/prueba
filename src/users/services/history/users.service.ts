@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User as UserEntity} from 'src/typeorm';
+import { Transaction, User as UserEntity} from 'src/typeorm';
 import { Transaction as TransactionEntity} from 'src/typeorm';
 import { CreateCoordinateDto } from 'src/users/dtos/CreateCoordinate.Dto';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
@@ -10,30 +10,12 @@ import { Repository } from 'typeorm';
 const axios = require('axios');
 
 @Injectable()
-export class UsersService {
+export class HistoryService {
 
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(TransactionEntity)
+    private readonly transactionRepository: Repository<TransactionEntity>,
   ) {}
-
-  createUser (CreateUserDto: CreateUserDto){
-    const password = encodePassword(CreateUserDto.password);
-    const userCreated = this.userRepository.create({...CreateUserDto, password});
-    return this.userRepository.save(userCreated);
-  }
-
-  findUserByUsername(userName: string) {
-    return this.userRepository.findOne(userName);
-  }
-
-  findUserById(id: number) {
-    return this.userRepository.findOne(id);
-  }
-
-  getAllUser () { 
-    return this.userRepository.find();
-  }
 
   async getAllRestaurants (createCoordinateDto: CreateCoordinateDto) {
     let restaurantes = [];
@@ -53,10 +35,5 @@ export class UsersService {
      })
     }
     return restaurantes;
-  }
-
-  createHistory(createCoordinateDto: CreateCoordinateDto){
-    
-
   }
 }

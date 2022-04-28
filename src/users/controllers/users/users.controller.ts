@@ -13,8 +13,10 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { CreateCoordinateDto } from 'src/users/dtos/CreateCoordinate.Dto';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from '../../services/users/users.service';
+const axios = require('axios');
 
 @Controller('users')
 export class UsersController {
@@ -30,5 +32,10 @@ export class UsersController {
   @Get('')
   getAllUser(){
     return this.userService.getAllUser();
+  }
+
+  @Get('restaurants')
+  async getrestaurants(@Param() createCoordinateDto: CreateCoordinateDto ){
+    return this.userService.getAllRestaurants(createCoordinateDto);
   }
 }
